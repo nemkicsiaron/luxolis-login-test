@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  console.error("You shouldn't be here");
+console.error("You shouldn't be here")
 </script>
 
 <template>
