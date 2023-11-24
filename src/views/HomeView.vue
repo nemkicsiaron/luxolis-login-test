@@ -4,12 +4,6 @@ console.error("You shouldn't be here");
 
 <template>
 	<main>
-		<HelloWorld msg="HOME" />
+		<h1> HOME </h1>
 	</main>
 </template>
-
-<style scoped>
-.h1 {
-	color: white;
-}
-</style>
