@@ -31,7 +31,6 @@ const onLogin = async () => {
 		console.log('Login successful');
 		router.push('/success');
 	} else if (!wrongCombination.value && username && password) {
-		console.log('Login failed with: ' + username, password, wrongCombination.value);
 		showModal.value = true;
 	}
 };
