@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import router from '@/router';
 import validateUser from '@/utils/ValidationChecker';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import PopupModal from '../components/PopupModal.vue';
 
 const usernameRef = ref('');
 const passwordRef = ref('');
-let wrongCombination =
-	passwordRef.value.match('^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/\\\s]).{3,}$') ?? false;
+const wrongCombination = ref(false);
+const showModal = ref(false);
+
+watch(passwordRef, (value) => wrongCombination.value = !value.match('^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/\\s]).{3,}$'));
 
 const onForgotPassword = () => {
 	// Handle forgot password logic
 	console.log('Forgot password clicked');
 };
+
 
 const onLogin = async () => {
 	// Perform asynchronous validation
@@ -22,24 +25,18 @@ const onLogin = async () => {
 	if (validCredentials) {
 		console.log('Login successful');
 		router.push('/success');
-	} else {
-		console.error('Login failed');
-		// Handle login failure (show error message, etc.)
-	}
+	} else if(!wrongCombination.value && username && password) {
+		console.log('Login failed with: ' + username, password, wrongCombination.value);
+    showModal.value = true;
+  }
 
-	// const validate = (event: { target: { value: string } }) => {
-	//   wrongCombination.value = !!event.target.value.match(
-	//     // eslint-disable-next-line no-useless-escape
-	//     '^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/\\\s]).{3,}$'
-	//   )
-	// }
 };
 </script>
 <template>
 	<main
 		class="relative flex items-center justify-center w-screen h-screen bg-[#244BC5] overflow-hidden"
 	>
-		<form class="relative z-10" @submit="onLogin">
+		<form class="relative z-10" @submit.prevent="onLogin">
 			<img
 				class="block mx-auto mb-[70px] top-0"
 				src="../assets/cart.svg"
@@ -58,25 +55,15 @@ const onLogin = async () => {
 			<label class="flex items-center border-white border rounded w-[300px] h-[45px]">
 				<img class="ml-[12px] mb-[12px] mt-[12px] mr-[20px]" src="../assets/lock.svg" />
 				<input
-					v-model.lazy="passwordRef"
+					v-model="passwordRef"
 					class="bg-transparent text-white placeholder:text-white focus:outline-none"
 					type="password"
-					id="password"
 					placeholder="PASSWORD"
-					@blur="
-						(event) => {
-							wrongCombination = passwordRef.match(
-								'^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/\\\s]).{3,}$'
-							);
-						}
-					"
 					required
 				/>
 			</label>
-			<span v-if="wrongCombination" class="text-red-500">Wrong combination</span>
+			<span v-if="wrongCombination" class="block text-gray-4800">Wrong combination</span>
 			<button
-				type="submit"
-				@click.prevent="onLogin"
 				class="relative bg-white text-[#2148C0] rounded w-[300px] h-[45px] text-center text-base uppercase font-semibold leading-5 text-align mt-11 shadow-[0_4px_4px_0_rgba(0, 0, 0, 0.30)]"
 			>
 				Login
@@ -87,6 +74,7 @@ const onLogin = async () => {
 				>Forgot password?</a
 			>
 		</form>
+    <PopupModal :isOpen="showModal" :message="'The provided password is wrong'" @modal-close="() => showModal = false"></PopupModal>
 		<span
 			class="absolute w-[724px] h-[724px] bottom-[-362px] left-[-362px] bg-[#264eca] rounded-full"
 		></span>
