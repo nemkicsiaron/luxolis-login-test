@@ -8,29 +8,35 @@ const emit = defineEmits(['modal-close']);
 const target = ref(null as HTMLElement | null);
 
 onMounted(() => {
-  const clickOutsideHandler = (event: Event) => {
-    if (target.value && !target.value.contains(event.target as Node)) {
-      emit('modal-close');
-    }
-  };
+	const clickOutsideHandler = (event: Event) => {
+		if (target.value && !target.value.contains(event.target as Node)) {
+			emit('modal-close');
+		}
+	};
 
-  document.addEventListener('click', clickOutsideHandler);
+	document.addEventListener('click', clickOutsideHandler);
 
-  onUnmounted(() => {
-    document.removeEventListener('click', clickOutsideHandler);
-  });
+	onUnmounted(() => {
+		document.removeEventListener('click', clickOutsideHandler);
+	});
 });
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed flex items-center justify-center w-full h-full z-50 bg-black bg-opacity-50">
-	<div class="flex flex-col items-center justify-center w-80 min-h-32 bg-white rounded-md shadow-lg px-10 py-7" ref="target">
-	<div :class="{'text-red-500': message.startsWith('Error:')}">
-		<slot name="content">{{ message }}</slot>
+	<div
+		v-if="isOpen"
+		class="fixed z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
+	>
+		<div
+			class="min-h-32 flex w-80 flex-col items-center justify-center rounded-md bg-white px-10 py-7 shadow-lg"
+			ref="target"
+		>
+			<div :class="{ 'text-red-500': message.startsWith('Error:') }">
+				<slot name="content">{{ message }}</slot>
+			</div>
+			<div class="mt-2 self-end rounded bg-[#244BC5] px-4 py-2 text-white">
+				<button @click.stop="emit('modal-close')">OK</button>
+			</div>
+		</div>
 	</div>
-	<div class="text-white bg-[#244BC5] py-2 px-4 mt-2 self-end rounded">
-		<button @click.stop="emit('modal-close')">OK</button>
-	</div>
-	</div>
-  </div>
 </template>
