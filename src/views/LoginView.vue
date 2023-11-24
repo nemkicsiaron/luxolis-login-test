@@ -2,9 +2,11 @@
 import router from '@/router';
 import validateUser from '@/utils/ValidationChecker'
 import { ref } from 'vue'
+import PopupModal from '../components/PopupModal.vue';
 
 const usernameRef = ref('')
 const passwordRef = ref('')
+const wrongCombination = ref(false);
 
 const onForgotPassword = () => {
   // Handle forgot password logic
@@ -23,8 +25,7 @@ const onLogin = async () => {
     router.push('/success');
     // Redirect or perform further actions for successful login
   } else {
-    console.log('Login failed')
-
+    console.error('Login failed')
     // Handle login failure (show error message, etc.)
   }
 }
@@ -56,7 +57,7 @@ const onLogin = async () => {
           required
         />
       </label>
-      <p v-if=""></p>
+      <p v-if="wrongCombination">Wrong combination</p>
       <button
         type="submit"
         class="relative bg-white text-[#2148C0] rounded w-[300px] h-[45px] text-center text-base uppercase font-semibold leading-5 text-align mt-11 shadow-[0_4px_4px_0_rgba(0, 0, 0, 0.30)]"
