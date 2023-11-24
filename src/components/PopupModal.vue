@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, defineProps, defineEmits, ref } from 'vue';
 
+//This is a known issue in the Vue 3 template generation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps(['isOpen', 'message']);
 const emit = defineEmits(['modal-close']);
 const target = ref(null as HTMLElement | null);
@@ -22,25 +24,13 @@ onMounted(() => {
 
 <template>
   <div v-if="isOpen" class="fixed flex items-center justify-center w-full h-full z-50 bg-black bg-opacity-50">
-    <div class="modal-wrapper">
-      <div class="flex items-center justify-center w-80 h-32 bg-white rounded-md shadow-lg" ref="target">
+	<div class="flex flex-col items-center justify-center w-80 min-h-32 bg-white rounded-md shadow-lg px-10 py-7" ref="target">
+	<div :class="{'text-red-500': message.startsWith('Error:')}">
 		<slot name="content">{{ message }}</slot>
-		<div class="text-white bg-[]">
-			<button @click.stop="emit('modal-close')">Submit</button>
-		</div>
-      </div>
-    </div>
+	</div>
+	<div class="text-white bg-[#244BC5] py-2 px-4 mt-2 self-end rounded">
+		<button @click.stop="emit('modal-close')">OK</button>
+	</div>
+	</div>
   </div>
 </template>
-
-<style scoped>
-.modal-container {
-  width: 300px;
-
-  margin: 150px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-}
-</style>

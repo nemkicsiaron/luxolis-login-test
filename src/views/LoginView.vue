@@ -64,8 +64,9 @@ const onLogin = async () => {
 			</label>
 			<span v-if="wrongCombination" class="block text-gray-4800">Wrong combination</span>
 			<button
-				class="relative bg-white text-[#2148C0] rounded w-[300px] h-[45px] text-center text-base uppercase font-semibold leading-5 text-align mt-11 shadow-[0_4px_4px_0_rgba(0, 0, 0, 0.30)]"
-			>
+				class="disabled:bg-gray-300 disabled:cursor-not-allowed relative bg-white text-[#2148C0] rounded w-[300px] h-[45px] text-center text-base uppercase font-semibold leading-5 text-align mt-11 shadow-[0_4px_4px_0_rgba(0, 0, 0, 0.30)]"
+        :disabled="wrongCombination"
+        >
 				Login
 			</button>
 			<a
@@ -74,7 +75,7 @@ const onLogin = async () => {
 				>Forgot password?</a
 			>
 		</form>
-    <PopupModal :isOpen="showModal" :message="'The provided password is wrong'" @modal-close="() => showModal = false"></PopupModal>
+    <PopupModal :isOpen="showModal" :message="'Error: The provided password is wrong'" @modal-close="() => showModal = false"></PopupModal>
 		<span
 			class="absolute w-[724px] h-[724px] bottom-[-362px] left-[-362px] bg-[#264eca] rounded-full"
 		></span>
