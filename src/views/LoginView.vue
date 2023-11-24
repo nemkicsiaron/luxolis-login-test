@@ -1,40 +1,41 @@
 <script setup lang="ts">
-import router from '@/router';
-import validateUser from '@/utils/ValidationChecker';
-import { ref, watch } from 'vue';
-import PopupModal from '../components/PopupModal.vue';
+  import router from '@/router';
+  import validateUser from '@/utils/ValidationChecker';
+  import { ref, watch } from 'vue';
+  import PopupModal from '../components/PopupModal.vue';
 
-const usernameRef = ref('');
-const passwordRef = ref('');
-const wrongCombination = ref(false);
-const showModal = ref(false);
+  const usernameRef = ref('');
+  const passwordRef = ref('');
+  const wrongCombination = ref(false);
+  const showModal = ref(false);
 
-watch(
-	passwordRef,
-	(value) =>
-		(wrongCombination.value = !value.match(
-			'^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/\\s]).{3,}$'
-		))
-);
+  watch(
+    passwordRef,
+    (value) =>
+      (wrongCombination.value = !value.match(
+        '^(?=.*?[A-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/\\s]).{3,}$'
+      ))
+  );
 
-const onForgotPassword = () => {
-	// Handle forgot password logic
-	console.log('Forgot password clicked');
-};
+  const onForgotPassword = () => {
+    // Handle forgot password logic
+    console.log('Forgot password clicked');
+  };
 
-const onLogin = async () => {
-	// Perform asynchronous validation
-	const username = usernameRef.value;
-	const password = passwordRef.value;
-	const validCredentials: boolean = await validateUser({ username, password });
-	if (validCredentials) {
-		console.log('Login successful');
-		router.push('/success');
-	} else if (!wrongCombination.value && username && password) {
-		showModal.value = true;
-	}
-};
+  const onLogin = async () => {
+    // Perform asynchronous validation
+    const username = usernameRef.value;
+    const password = passwordRef.value;
+    const validCredentials: boolean = await validateUser({ username, password });
+    if (validCredentials) {
+      console.log('Login successful');
+      router.push('/success');
+    } else if (!wrongCombination.value && username && password) {
+      showModal.value = true;
+    }
+  };
 </script>
+
 <template>
 	<main
 		class="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-[#244BC5]"

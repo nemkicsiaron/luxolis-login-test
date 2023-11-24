@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, defineProps, defineEmits, ref } from 'vue';
+	import { onMounted, onUnmounted, defineProps, defineEmits, ref } from 'vue';
 
-//This is a known issue in the Vue 3 template generation
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps(['isOpen', 'message']);
-const emit = defineEmits(['modal-close']);
-const target = ref(null as HTMLElement | null);
+	//This is a known issue in the Vue 3 template generation
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const props = defineProps(['isOpen', 'message']);
+	const emit = defineEmits(['modal-close']);
+	const target = ref(null as HTMLElement | null);
 
-onMounted(() => {
-	const clickOutsideHandler = (event: Event) => {
-		if (target.value && !target.value.contains(event.target as Node)) {
-			emit('modal-close');
-		}
-	};
+	onMounted(() => {
+		const clickOutsideHandler = (event: Event) => {
+			if (target.value && !target.value.contains(event.target as Node)) {
+				emit('modal-close');
+			}
+		};
 
-	document.addEventListener('click', clickOutsideHandler);
+		document.addEventListener('click', clickOutsideHandler);
 
-	onUnmounted(() => {
-		document.removeEventListener('click', clickOutsideHandler);
+		onUnmounted(() => {
+			document.removeEventListener('click', clickOutsideHandler);
+		});
 	});
-});
 </script>
 
 <template>
